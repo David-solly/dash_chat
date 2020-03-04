@@ -65,91 +65,94 @@ class ChatInputToolbar extends StatelessWidget {
       createdAt: DateTime.now(),
     );
 
-    return Container(
-      padding: inputToolbarPadding,
-      margin: inputToolbarMargin,
-      decoration: inputContainerStyle != null
-          ? inputContainerStyle
-          : BoxDecoration(color: Colors.white),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              ...leading,
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: TextField(
-                    focusNode: focusNode,
-                    onChanged: (value) {
-                      onTextChange(value);
-                    },
-                    buildCounter: (
-                      BuildContext context, {
-                      int currentLength,
-                      int maxLength,
-                      bool isFocused,
-                    }) =>
-                        null,
-                    decoration: inputDecoration != null
-                        ? inputDecoration
-                        : InputDecoration.collapsed(
-                            hintText: "",
-                            fillColor: Colors.white,
-                          ),
-                    textCapitalization: textCapitalization,
-                    controller: controller,
-                    style: inputTextStyle,
-                    maxLength: maxInputLength,
-                    minLines: 1,
-                    maxLines: inputMaxLines,
-                    showCursor: showInputCursor,
-                    cursorColor: inputCursorColor,
-                    cursorWidth: inputCursorWidth,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        padding: inputToolbarPadding,
+        margin: inputToolbarMargin,
+        decoration: inputContainerStyle != null
+            ? inputContainerStyle
+            : BoxDecoration(color: Colors.white),
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                ...leading,
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: TextField(
+                      focusNode: focusNode,
+                      onChanged: (value) {
+                        onTextChange(value);
+                      },
+                      buildCounter: (
+                        BuildContext context, {
+                        int currentLength,
+                        int maxLength,
+                        bool isFocused,
+                      }) =>
+                          null,
+                      decoration: inputDecoration != null
+                          ? inputDecoration
+                          : InputDecoration.collapsed(
+                              hintText: "",
+                              fillColor: Colors.white,
+                            ),
+                      textCapitalization: textCapitalization,
+                      controller: controller,
+                      style: inputTextStyle,
+                      maxLength: maxInputLength,
+                      minLines: 1,
+                      maxLines: inputMaxLines,
+                      showCursor: showInputCursor,
+                      cursorColor: inputCursorColor,
+                      cursorWidth: inputCursorWidth,
+                    ),
                   ),
                 ),
-              ),
-              if (showTraillingBeforeSend) ...trailling,
-              if (sendButtonBuilder != null)
-                sendButtonBuilder(() async {
-                  if (text.length != 0) {
-                    await onSend(message);
+                if (showTraillingBeforeSend) ...trailling,
+                if (sendButtonBuilder != null)
+                  sendButtonBuilder(() async {
+                    if (text.length != 0) {
+                      await onSend(message);
 
-                    controller.text = "";
+                      controller.text = "";
 
-                    onTextChange("");
-                  }
-                })
-              else
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: alwaysShowSend || text.length != 0
-                      ? () async {
-                          if (text.length != 0) {
-                            await onSend(message);
+                      onTextChange("");
+                    }
+                  })
+                else
+                  IconButton(
+                    icon: Icon(Icons.send),
+                    onPressed: alwaysShowSend || text.length != 0
+                        ? () async {
+                            if (text.length != 0) {
+                              await onSend(message);
 
-                            controller.text = "";
+                              controller.text = "";
 
-                            onTextChange("");
+                              onTextChange("");
 
-                            Timer(Duration(milliseconds: 700), () {
-                              scrollController.animateTo(
-                                scrollController.position.maxScrollExtent,
-                                curve: Curves.easeOut,
-                                duration: const Duration(milliseconds: 300),
-                              );
-                            });
+                              Timer(Duration(milliseconds: 700), () {
+                                scrollController.animateTo(
+                                  scrollController.position.maxScrollExtent,
+                                  curve: Curves.easeOut,
+                                  duration: const Duration(milliseconds: 300),
+                                );
+                              });
+                            }
                           }
-                        }
-                      : null,
-                ),
-              if (!showTraillingBeforeSend) ...trailling,
-            ],
-          ),
-          if (inputFooterBuilder != null) inputFooterBuilder()
-        ],
+                        : null,
+                  ),
+                if (!showTraillingBeforeSend) ...trailling,
+              ],
+            ),
+            if (inputFooterBuilder != null) inputFooterBuilder()
+          ],
+        ),
       ),
     );
   }

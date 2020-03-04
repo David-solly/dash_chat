@@ -20,6 +20,7 @@ class MessageListView extends StatefulWidget {
   final Widget Function(String) dateBuilder;
   final Widget Function() renderMessageFooter;
   final BoxDecoration messageContainerDecoration;
+  final BoxDecoration messageContainerDecorationRecepient;
   final List<MatchText> parsePatterns;
   final ScrollController scrollController;
   final EdgeInsets messageContainerPadding;
@@ -41,6 +42,7 @@ class MessageListView extends StatefulWidget {
     this.scrollController,
     this.parsePatterns = const [],
     this.messageContainerDecoration,
+    this.messageContainerDecorationRecepient,
     this.messages,
     this.user,
     this.showuserAvatar,
@@ -263,8 +265,13 @@ class _MessageListViewState extends State<MessageListView> {
                                               widget.messageTextBuilder,
                                           messageTimeBuilder:
                                               widget.messageTimeBuilder,
-                                          messageContainerDecoration:
-                                              widget.messageContainerDecoration,
+                                          messageContainerDecoration: widget
+                                                      .messages[i].user.uid ==
+                                                  widget.user.uid
+                                              ? widget
+                                                  .messageContainerDecoration
+                                              : widget
+                                                  .messageContainerDecorationRecepient,
                                           parsePatterns: widget.parsePatterns,
                                         ),
                                 ),

@@ -127,6 +127,10 @@ class DashChat extends StatefulWidget {
   /// takes [BoxDecoration]
   final BoxDecoration messageContainerDecoration;
 
+  /// Provides a custom style to the message container
+  /// takes [BoxDecoration]
+  final BoxDecoration messageContainerDecorationRecepient;
+
   /// [List] of [Widget] to show before the [TextField].
   final List<Widget> leading;
 
@@ -243,6 +247,7 @@ class DashChat extends StatefulWidget {
     this.leading = const <Widget>[],
     this.trailing = const <Widget>[],
     this.messageContainerDecoration,
+    this.messageContainerDecorationRecepient,
     this.messageContainerFlex = 1,
     this.height,
     this.width,
@@ -352,7 +357,8 @@ class DashChatState extends State<DashChat> {
     textController = widget.textController ?? TextEditingController();
 
     Timer(Duration(milliseconds: 500), () {
-      double initPos = widget.inverted ? 0.0 : scrollController.position.maxScrollExtent;
+      double initPos =
+          widget.inverted ? 0.0 : scrollController.position.maxScrollExtent;
       scrollController.jumpTo(initPos);
 
       scrollController.addListener(() {
@@ -436,6 +442,8 @@ class DashChatState extends State<DashChat> {
               messageTimeBuilder: widget.messageTimeBuilder,
               dateBuilder: widget.dateBuilder,
               messageContainerDecoration: widget.messageContainerDecoration,
+              messageContainerDecorationRecepient:
+                  widget.messageContainerDecorationRecepient,
               parsePatterns: widget.parsePatterns,
               changeVisible: changeVisible,
               visible: visible,
@@ -445,9 +453,9 @@ class DashChatState extends State<DashChat> {
                 widget.messages[widget.messages.length - 1].user.uid !=
                     widget.user.uid)
               Container(
-                constraints: BoxConstraints(maxHeight: 100.0),
+                constraints: BoxConstraints(maxHeight: 48.0),
                 width: MediaQuery.of(context).size.width,
-                child: Wrap(
+                child: ListView(
                   children: <Widget>[
                     if (widget.messages[widget.messages.length - 1]
                             .quickReplies !=
@@ -457,11 +465,7 @@ class DashChatState extends State<DashChat> {
                           .sublist(
                               0,
                               widget.messages[widget.messages.length - 1]
-                                          .quickReplies.values.length <=
-                                      3
-                                  ? widget.messages[widget.messages.length - 1]
-                                      .quickReplies.values.length
-                                  : 3)
+                                  .quickReplies.values.length)
                           .map(
                             (reply) => QuickReply(
                               reply: reply,
@@ -473,6 +477,7 @@ class DashChatState extends State<DashChat> {
                           )
                           .toList(),
                   ],
+                  scrollDirection: Axis.horizontal,
                 ),
               ),
             if (widget.chatFooterBuilder != null) widget.chatFooterBuilder(),
